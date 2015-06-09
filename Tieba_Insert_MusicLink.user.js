@@ -3,7 +3,9 @@
 // @namespace   tieba
 // @description 贴吧自定义插入mp3链接
 // @include     http://tieba.baidu.com/*
-// @version     1.0.1
+// @require     http://libs.baidu.com/jquery/1.9.0/jquery.js
+// @grant       GM_addStyle
+// @version     1.0.2
 // @author	  初代作者为校长之怒/修复（绯色）
 // @updateURL   https://nightlyfantasy.github.io/Tieba_Insert_MusicLink/Tieba_Insert_MusicLink.meta.js
 // @downloadURL https://nightlyfantasy.github.io/Tieba_Insert_MusicLink/Tieba_Insert_MusicLink.user.js
@@ -14,7 +16,6 @@
 2014/6/1 修复火狐吧友说该脚本在chrome的浮动回帖框会出现两个插入框的问题（在此吐槽，狐吧基佬跑去使用chrome闹哪样）
 */
 //JQuery支持
-$ = unsafeWindow.$;
 
 //音乐链接面板 GUI界面
 var musicUrl = '<span class="label">歌名</span><input style="width:100px" id="musicUrlTitle" placeholder="输入歌曲名" value="">';
@@ -46,7 +47,7 @@ function check() {
 			$('#Check_status').hide();
 		}, 2000);
 	} else {
-		rewriteGetContent();
+		location.href = "javascript:rewriteGetContent();void(0);";
 		convertLinks();
 	}
 }
@@ -129,10 +130,10 @@ function removeNodeInsertedListener(bindedFunc) {
 //度娘处理函数改写(来自猫酱和小鹿姐)
 
 function rewriteGetContent() {
-	var b = unsafeWindow.test_editor.getContent;
-	unsafeWindow.test_editor.getContent = function() {
+	var b = test_editor.getContent;
+	test_editor.getContent = function() {
 		cr_flash = [];
-		var d = b.call(unsafeWindow.test_editor);
+		var d = b.call(test_editor);
 		d = d.replace(/&#39;/g, "'").replace(/&quot;/g, '"').replace(/(^(<br\/>)+)|((<br\/>)+$)/g, "");
 		var embeds = d.match(/<embed[^>]*>/g);
 		if (embeds) {
@@ -149,3 +150,4 @@ function rewriteGetContent() {
 		return d;
 	};
 }
+location.href = "javascript:"+String(rewriteGetContent) + ";void(0)";
